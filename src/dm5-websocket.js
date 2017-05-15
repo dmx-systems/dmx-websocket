@@ -1,6 +1,6 @@
-import http from 'axios'
+import dm5 from 'dm5'
 
-var config = http.get('/websockets')
+var config = dm5.restClient.getWebsocketConfig()
 
 /**
  * A constructor for a WebSocket connection.
@@ -23,8 +23,8 @@ export default function (pluginUri, messageProcessor) {
 
   var url, ws
 
-  config.then(response => {
-    url = response.data['dm4.websockets.url']
+  config.then(config => {
+    url = config['dm4.websockets.url']
     console.log('[DM5] CONFIG: the WebSocket server is reachable at', url)
     setupWebsocket()
   })
@@ -47,8 +47,7 @@ export default function (pluginUri, messageProcessor) {
     }
 
     ws.onclose = function (e) {
-      console.log('[DM5] Closing WebSocket connection to', e.target.url, e.reason)
-      console.log('[DM5] Reopening ...')
+      console.log(`[DM5] Closing WebSocket connection (${e.reason}), reopening ...`)
       setTimeout(setupWebsocket, 1000)
     }
   }

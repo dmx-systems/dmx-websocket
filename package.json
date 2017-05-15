@@ -8,5 +8,6 @@
     "url": "https://github.com/jri/dm5-websocket.git"
   },
   "dependencies": {
+    "dm5": "^0.1.0"
   }
 }
