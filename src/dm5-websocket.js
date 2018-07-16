@@ -9,6 +9,10 @@ var config = dm5.restClient.getWebsocketConfig()
  * The created WebSocket auto-reconnects once timed out by the browser (usually every 5 minutes).
  * WebSocket messages are expected to be JSON. Serialization/Deserialization performs automatically.
  *
+ * Properties of a DM5WebSocket instance:
+ *   `url` - url of the WebSocket server
+ *   `ws`  - the native WebSocket object
+ *
  * @param   pluginUri
  *              the URI of the calling plugin.
  * @param   messageProcessor
@@ -19,36 +23,38 @@ var config = dm5.restClient.getWebsocketConfig()
  *          This object provides a "send_message" function which takes 1 argument: the message to be
  *          sent to the server. The argument will be automatically serialized as a JSON object.
  */
-export default function (pluginUri, messageProcessor) {
+export default class DM5WebSocket {
 
-  var url, ws
-
-  config.then(config => {
-    url = config['dm4.websockets.url']
-    console.log('[DM5] CONFIG: the WebSocket server is reachable at', url)
-    setupWebsocket()
-  })
-
-  this.send_message = function (message) {
-    ws.send(JSON.stringify(message))
+  constructor (pluginUri, messageProcessor) {
+    this.pluginUri = pluginUri
+    this.messageProcessor = messageProcessor
+    config.then(config => {
+      this.url = config['dm4.websockets.url']
+      console.log('[DM5] CONFIG: the WebSocket server is reachable at', this.url)
+      this._setupWebsocket()
+    })
   }
 
-  function setupWebsocket () {
-    ws = new window.WebSocket(url, pluginUri)
+  send_message (message) {
+    this.ws.send(JSON.stringify(message))
+  }
 
-    ws.onopen = function (e) {
+  _setupWebsocket () {
+    this.ws = new window.WebSocket(this.url, this.pluginUri)
+
+    this.ws.onopen = e => {
       console.log('[DM5] Opening WebSocket connection to', e.target.url)
     }
 
-    ws.onmessage = function (e) {
-      var message = JSON.parse(e.data)
+    this.ws.onmessage = e => {
+      const message = JSON.parse(e.data)
       console.log('[DM5] Message received', message)
-      messageProcessor(message)
+      this.messageProcessor(message)
     }
 
-    ws.onclose = function (e) {
+    this.ws.onclose = e => {
       console.log(`[DM5] Closing WebSocket connection (${e.reason}), reopening ...`)
-      setTimeout(setupWebsocket, 1000)
+      setTimeout(this._setupWebsocket.bind(this), 1000)
     }
   }
 }
