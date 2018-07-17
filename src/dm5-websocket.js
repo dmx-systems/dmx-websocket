@@ -1,6 +1,7 @@
 import dm5 from 'dm5'
 
-var config = dm5.restClient.getWebsocketConfig()
+const config = dm5.restClient.getWebsocketConfig()
+const IDLE_INTERVAL = 60 * 1000  // 60s
 
 /**
  * A constructor for a WebSocket connection.
@@ -15,46 +16,57 @@ var config = dm5.restClient.getWebsocketConfig()
  *
  * @param   pluginUri
  *              the URI of the calling plugin.
- * @param   messageProcessor
+ * @param   dispatch
  *              the function that processes incoming messages.
  *              One argument is passed: the message pushed by the server (a deserialzed JSON object).
  *
  * @return  The created WebSocket object, wrapped as a DM5 proprietary object.
- *          This object provides a "send_message" function which takes 1 argument: the message to be
+ *          This object provides a "sendMessage" function which takes 1 argument: the message to be
  *          sent to the server. The argument will be automatically serialized as a JSON object.
  */
 export default class DM5WebSocket {
 
-  constructor (pluginUri, messageProcessor) {
+  constructor (pluginUri, dispatch) {
     this.pluginUri = pluginUri
-    this.messageProcessor = messageProcessor
+    this.dispatch = dispatch
     config.then(config => {
       this.url = config['dm4.websockets.url']
       console.log('[DM5] CONFIG: the WebSocket server is reachable at', this.url)
-      this._setupWebsocket()
+      this._createWebSocket()
+      this._startIdler()
     })
   }
 
-  send_message (message) {
+  sendMessage (message) {
     this.ws.send(JSON.stringify(message))
   }
 
-  _setupWebsocket () {
-    this.ws = new window.WebSocket(this.url, this.pluginUri)
-
+  _createWebSocket () {
+    this.ws = new WebSocket(this.url, this.pluginUri)
     this.ws.onopen = e => {
       console.log('[DM5] Opening WebSocket connection to', e.target.url)
     }
-
     this.ws.onmessage = e => {
       const message = JSON.parse(e.data)
       console.log('[DM5] Message received', message)
-      this.messageProcessor(message)
+      this.dispatch(message)
     }
-
     this.ws.onclose = e => {
-      console.log(`[DM5] Closing WebSocket connection (${e.reason}), reopening ...`)
-      setTimeout(this._setupWebsocket.bind(this), 1000)
+      console.log(`[DM5] Closing WebSocket connection (${e.reason})`)
+      // TODO: stop idler
+      //
+      // auto-reconnect (disabled)
+      // console.log(`[DM5] Closing WebSocket connection (${e.reason}), reopening ...`)
+      // setTimeout(this._createWebSocket.bind(this), 1000)
     }
+  }
+
+  _startIdler () {
+    setInterval(this._sendIdle.bind(this), IDLE_INTERVAL)
+  }
+
+  _sendIdle () {
+    console.log('sending idle')
+    this.sendMessage({type: 'idle'})
   }
 }
