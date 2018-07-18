@@ -1,47 +1,49 @@
 import dm5 from 'dm5'
 
-const config = dm5.restClient.getWebsocketConfig()
 const IDLE_INTERVAL = 60 * 1000  // 60s
 
+const config = dm5.restClient.getWebsocketConfig()
+
 /**
- * A constructor for a WebSocket connection.
+ * A WebSocket connection to the DM5 server.
  *
  * The URL to connect to is determined automatically, based on the server-side `dm4.websockets.url` config property.
- * The created WebSocket auto-reconnects once timed out by the browser (usually every 5 minutes).
  * WebSocket messages are expected to be JSON. Serialization/Deserialization performs automatically.
  *
- * Properties of a DM5WebSocket instance:
+ * Properties:
  *   `url` - url of the WebSocket server
  *   `ws`  - the native WebSocket object
- *
- * @param   pluginUri
- *              the URI of the calling plugin.
- * @param   dispatch
- *              the function that processes incoming messages.
- *              One argument is passed: the message pushed by the server (a deserialzed JSON object).
- *
- * @return  The created WebSocket object, wrapped as a DM5 proprietary object.
- *          This object provides a "sendMessage" function which takes 1 argument: the message to be
- *          sent to the server. The argument will be automatically serialized as a JSON object.
  */
 export default class DM5WebSocket {
 
+  /**
+   * @param   pluginUri
+   *              the URI of the calling plugin.
+   * @param   dispatch
+   *              the function that processes incoming messages.
+   *              One argument is passed: the message pushed by the server (a deserialzed JSON object).
+   */
   constructor (pluginUri, dispatch) {
     this.pluginUri = pluginUri
     this.dispatch = dispatch
     config.then(config => {
       this.url = config['dm4.websockets.url']
       console.log('[DM5] CONFIG: the WebSocket server is reachable at', this.url)
-      this._createWebSocket()
-      this._startIdler()
+      this._create()
+      this._keepAlive()
     })
   }
 
-  sendMessage (message) {
+  /**
+   * Sends a message to the server.
+   *
+   * @param   message   the message to be sent (arbitrary type). Will be serialized as JSON.
+   */
+  send (message) {
     this.ws.send(JSON.stringify(message))
   }
 
-  _createWebSocket () {
+  _create () {
     this.ws = new WebSocket(this.url, this.pluginUri)
     this.ws.onopen = e => {
       console.log('[DM5] Opening WebSocket connection to', e.target.url)
@@ -53,20 +55,20 @@ export default class DM5WebSocket {
     }
     this.ws.onclose = e => {
       console.log(`[DM5] Closing WebSocket connection (${e.reason})`)
-      // TODO: stop idler
+      clearInterval(this.idleId)
       //
       // auto-reconnect (disabled)
       // console.log(`[DM5] Closing WebSocket connection (${e.reason}), reopening ...`)
-      // setTimeout(this._createWebSocket.bind(this), 1000)
+      // setTimeout(this._create.bind(this), 1000)
     }
   }
 
-  _startIdler () {
-    setInterval(this._sendIdle.bind(this), IDLE_INTERVAL)
+  _keepAlive () {
+    this.idleId = setInterval(this._idle.bind(this), IDLE_INTERVAL)
   }
 
-  _sendIdle () {
-    console.log('sending idle')
-    this.sendMessage({type: 'idle'})
+  _idle () {
+    console.log('idle connection')
+    this.send({type: 'idle'})
   }
 }
