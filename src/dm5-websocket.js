@@ -7,7 +7,7 @@ const config = dm5.restClient.getWebsocketConfig()
 /**
  * A WebSocket connection to the DM5 server.
  *
- * The URL to connect to is determined automatically, based on the server-side `dm4.websockets.url` config property.
+ * The URL to connect to is determined automatically, based on the server-side `dmx.websockets.url` config property.
  * WebSocket messages are expected to be JSON. Serialization/Deserialization performs automatically.
  *
  * Properties:
@@ -27,7 +27,7 @@ export default class DM5WebSocket {
     this.pluginUri = pluginUri
     this.dispatch = dispatch
     config.then(config => {
-      this.url = config['dm4.websockets.url']
+      this.url = config['dmx.websockets.url']
       console.log('[DM5] CONFIG: the WebSocket server is reachable at', this.url)
       this._create()
       this._keepAlive()
@@ -68,7 +68,7 @@ export default class DM5WebSocket {
   }
 
   _idle () {
-    console.log('idle connection')
+    console.log('[DM5] Idle WebSocket connection')
     this.send({type: 'idle'})
   }
 }
