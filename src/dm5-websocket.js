@@ -28,7 +28,7 @@ export default class DM5WebSocket {
     this.dispatch = dispatch
     config.then(config => {
       this.url = config['dmx.websockets.url']
-      console.log('[DM5] CONFIG: the WebSocket server is reachable at', this.url)
+      console.log('[DMX] CONFIG: the WebSocket server is reachable at', this.url)
       this._create()
       this._keepAlive()
     })
@@ -46,19 +46,19 @@ export default class DM5WebSocket {
   _create () {
     this.ws = new WebSocket(this.url, this.pluginUri)
     this.ws.onopen = e => {
-      console.log('[DM5] Opening WebSocket connection to', e.target.url)
+      console.log('[DMX] Opening WebSocket connection to', e.target.url)
     }
     this.ws.onmessage = e => {
       const message = JSON.parse(e.data)
-      console.log('[DM5] Message received', message)
+      console.log('[DMX] Message received', message)
       this.dispatch(message)
     }
     this.ws.onclose = e => {
-      console.log(`[DM5] Closing WebSocket connection (${e.reason})`)
+      console.log(`[DMX] Closing WebSocket connection (${e.reason})`)
       clearInterval(this.idleId)
       //
       // auto-reconnect (disabled)
-      // console.log(`[DM5] Closing WebSocket connection (${e.reason}), reopening ...`)
+      // console.log(`[DMX] Closing WebSocket connection (${e.reason}), reopening ...`)
       // setTimeout(this._create.bind(this), 1000)
     }
   }
@@ -68,7 +68,7 @@ export default class DM5WebSocket {
   }
 
   _idle () {
-    console.log('[DM5] Idle WebSocket connection')
+    console.log('[DMX] Idle WebSocket connection')
     this.send({type: 'idle'})
   }
 }
