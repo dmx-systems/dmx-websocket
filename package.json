@@ -3,7 +3,7 @@
   "version": "0.2.0",
   "description": "WebSocket support for DeepaMehta 5",
   "author": "Jörg Richter",
-  "license": "MIT",
+  "license": "GPL-3.0-or-later",
   "main": "src/dm5-websocket.js",
   "repository": {
     "type": "git",

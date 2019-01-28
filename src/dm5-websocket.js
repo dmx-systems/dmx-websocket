@@ -28,7 +28,7 @@ export default class DM5WebSocket {
     this.dispatch = dispatch
     config.then(config => {
       this.url = config['dmx.websockets.url']
-      console.log('[DMX] CONFIG: the WebSocket server is reachable at', this.url)
+      console.log('[DMX] CONFIG: WebSocket server is reachable at', this.url)
       this._create()
       this._keepAlive()
     })
@@ -50,7 +50,7 @@ export default class DM5WebSocket {
     }
     this.ws.onmessage = e => {
       const message = JSON.parse(e.data)
-      console.log('[DMX] Message received', message)
+      console.log('[DMX] Receiving message', message)
       this.dispatch(message)
     }
     this.ws.onclose = e => {
@@ -68,7 +68,7 @@ export default class DM5WebSocket {
   }
 
   _idle () {
-    console.log('[DMX] Idle WebSocket connection')
+    console.log('[DMX] WebSocket connection idle')
     this.send({type: 'idle'})
   }
 }
