@@ -2,6 +2,10 @@
 
 ## Version History
 
+**0.3** -- Jan 29, 2019
+
+* Change license to `GPL-3.0-or-later`
+
 **0.2** -- Jul 31, 2018
 
 * Send idle messages to keep connection open
@@ -15,4 +19,4 @@
 
 ------------
 Jörg Richter  
-Jul 31, 2018
+Jan 29, 2019
