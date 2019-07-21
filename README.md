@@ -2,6 +2,10 @@
 
 ## Version History
 
+**0.4** -- Jul 22, 2019
+
+* Change license to `AGPL-3.0`
+
 **0.3** -- Jan 29, 2019
 
 * Change license to `GPL-3.0-or-later`
@@ -19,4 +23,4 @@
 
 ------------
 Jörg Richter  
-Jan 29, 2019
+Jul 22, 2019
