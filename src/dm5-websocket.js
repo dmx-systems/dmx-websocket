@@ -4,6 +4,11 @@ const IDLE_INTERVAL = 60 * 1000  // 60s
 
 const config = dm5.restClient.getWebsocketConfig()
 
+const clientId = newClientId()
+updateClientIdCookie()
+
+window.addEventListener('focus', updateClientIdCookie)
+
 /**
  * A WebSocket connection to the DM5 server.
  *
@@ -71,4 +76,13 @@ export default class DM5WebSocket {
     console.log('[DMX] WebSocket connection idle')
     this.send({type: 'idle'})
   }
+}
+
+function newClientId () {
+  return Math.floor(Number.MAX_SAFE_INTEGER * Math.random())
+}
+
+function updateClientIdCookie () {
+  // console.log('dmx_client_id', clientId)
+  dm5.utils.setCookie('dmx_client_id', clientId)
 }
