@@ -2,6 +2,10 @@
 
 ## Version History
 
+**0.5** -- Mar 30, 2020
+
+* Handles "Client ID" cookie
+
 **0.4** -- Jul 22, 2019
 
 * Change license to `AGPL-3.0`
@@ -23,4 +27,4 @@
 
 ------------
 Jörg Richter  
-Jul 22, 2019
+Mar 30, 2020
