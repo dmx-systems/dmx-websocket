@@ -1,6 +1,10 @@
-# DeepaMehta 5 WebSocket
+# DMX 5 WebSocket
 
 ## Version History
+
+**1.0** -- Aug 4, 2020
+
+* Rename this package `dm5-websocket` -> `dmx-websocket`
 
 **0.5** -- Mar 30, 2020
 
@@ -27,4 +31,4 @@
 
 ------------
 Jörg Richter  
-Mar 30, 2020
+Aug 4, 2020
