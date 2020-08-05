@@ -2,6 +2,10 @@
 
 ## Version History
 
+**1.0.1** -- Aug 5, 2020
+
+* Fix imports
+
 **1.0** -- Aug 4, 2020
 
 * Rename this package `dm5-websocket` -> `dmx-websocket`
@@ -31,4 +35,4 @@
 
 ------------
 Jörg Richter  
-Aug 4, 2020
+Aug 5, 2020

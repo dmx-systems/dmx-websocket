@@ -1,6 +1,6 @@
 {
   "name": "dmx-websocket",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "WebSocket support for DMX 5",
   "author": "Jörg Richter",
   "license": "AGPL-3.0",
