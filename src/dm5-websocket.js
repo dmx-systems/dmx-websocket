@@ -33,7 +33,7 @@ export default class DM5WebSocket {
     this.dispatch = dispatch
     config.then(config => {
       this.url = config['dmx.websockets.url']
-      console.log('[DMX] CONFIG: WebSocket server is reachable at', this.url)
+      // console.log('[DMX] CONFIG: WebSocket server is reachable at', this.url)
       this._create()
       this._keepAlive()
     })
