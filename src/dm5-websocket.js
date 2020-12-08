@@ -2,7 +2,7 @@ import dm5 from 'dmx-api'
 
 const IDLE_INTERVAL = 60 * 1000  // 60s
 
-const config = dm5.restClient.getWebsocketConfig()
+const config = dm5.rpc.getWebsocketConfig()
 
 const clientId = newClientId()
 updateClientIdCookie()
