@@ -1,8 +1,8 @@
-import dm5 from 'dmx-api'
+import dmx from 'dmx-api'
 
 const IDLE_INTERVAL = 60 * 1000  // 60s
 
-const config = dm5.rpc.getWebsocketConfig()
+const config = dmx.rpc.getWebsocketConfig()
 
 const clientId = newClientId()
 updateClientIdCookie()
@@ -84,5 +84,5 @@ function newClientId () {
 
 function updateClientIdCookie () {
   // console.log('dmx_client_id', clientId)
-  dm5.utils.setCookie('dmx_client_id', clientId)
+  dmx.utils.setCookie('dmx_client_id', clientId)
 }
