@@ -10,7 +10,7 @@ updateClientIdCookie()
 window.addEventListener('focus', updateClientIdCookie)
 
 /**
- * A WebSocket connection to the DM5 server.
+ * A WebSocket connection to the DMX server.
  *
  * The URL to connect to is determined automatically, based on the server-side `dmx.websockets.url` config property.
  * WebSocket messages are expected to be JSON. Serialization/Deserialization performs automatically.
@@ -19,7 +19,7 @@ window.addEventListener('focus', updateClientIdCookie)
  *   `url` - url of the WebSocket server
  *   `ws`  - the native WebSocket object
  */
-export default class DM5WebSocket {
+export default class DMXWebSocket {
 
   /**
    * @param   pluginUri
