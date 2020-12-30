@@ -2,6 +2,16 @@
 
 ## Version History
 
+**2.0** -- Dec 30, 2020
+
+* BREAKING CHANGES
+    * Make use of `dmx-api` 2.0
+    * Various `dm5` -> `dmx` renamings
+* Chore:
+    * Less console logging
+    * Adapt URLs to `github.com/dmx-systems`
+    * Code run through `eslint`
+
 **1.0.1** -- Aug 5, 2020
 
 * Fix imports
@@ -35,4 +45,4 @@
 
 ------------
 Jörg Richter  
-Aug 5, 2020
+Dec 30, 2020
