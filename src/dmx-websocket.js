@@ -33,7 +33,7 @@ export default class DMXWebSocket {
     this.dispatch = dispatch
     config.then(config => {
       this.url = config['dmx.websockets.url']
-      // console.log('[DMX] CONFIG: WebSocket server is reachable at', this.url)
+      // DEV && console.log('[DMX] CONFIG: WebSocket server is reachable at', this.url)
       this._create()
       this._keepAlive()
     })
@@ -51,19 +51,19 @@ export default class DMXWebSocket {
   _create () {
     this.ws = new WebSocket(this.url, this.pluginUri)
     this.ws.onopen = e => {
-      console.log('[DMX] Opening WebSocket connection to', e.target.url)
+      DEV && console.log('[DMX] Opening WebSocket connection to', e.target.url)
     }
     this.ws.onmessage = e => {
       const message = JSON.parse(e.data)
-      console.log('[DMX] Receiving message', message)
+      DEV && console.log('[DMX] Receiving message', message)
       this.dispatch(message)
     }
     this.ws.onclose = e => {
-      console.log(`[DMX] Closing WebSocket connection (${e.reason})`)
+      DEV && console.log(`[DMX] Closing WebSocket connection (${e.reason})`)
       clearInterval(this.idleId)
       //
       // auto-reconnect (disabled)
-      // console.log(`[DMX] Closing WebSocket connection (${e.reason}), reopening ...`)
+      // DEV && console.log(`[DMX] Closing WebSocket connection (${e.reason}), reopening ...`)
       // setTimeout(this._create.bind(this), 1000)
     }
   }
@@ -73,7 +73,7 @@ export default class DMXWebSocket {
   }
 
   _idle () {
-    console.log('[DMX] WebSocket connection idle')
+    DEV && console.log('[DMX] WebSocket connection idle')
     this.send({type: 'idle'})
   }
 }
@@ -83,6 +83,6 @@ function newClientId () {
 }
 
 function updateClientIdCookie () {
-  // console.log('dmx_client_id', clientId)
+  // DEV && console.log('dmx_client_id', clientId)
   dmx.utils.setCookie('dmx_client_id', clientId)
 }
