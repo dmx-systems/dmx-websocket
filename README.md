@@ -2,6 +2,10 @@
 
 ## Version History
 
+**2.0.1** -- Jun 14, 2021
+
+* Log to browser console only in dev mode
+
 **2.0** -- Dec 30, 2020
 
 * BREAKING CHANGES
@@ -42,7 +46,3 @@
 * Add GitLab CI/CD
 
 **0.1** -- Jun 14, 2017
-
-------------
-Jörg Richter  
-Dec 30, 2020
