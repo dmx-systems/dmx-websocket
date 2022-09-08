@@ -22,15 +22,12 @@ window.addEventListener('focus', updateClientIdCookie)
 export default class DMXWebSocket {
 
   /**
-   * @param   pluginUri
-   *              the URI of the calling plugin.
-   * @param   dispatch
+   * @param   messageHandler
    *              the function that processes incoming messages.
    *              One argument is passed: the message pushed by the server (a deserialzed JSON object).
    */
-  constructor (pluginUri, dispatch) {
-    this.pluginUri = pluginUri
-    this.dispatch = dispatch
+  constructor (messageHandler) {
+    this.messageHandler = messageHandler
     config.then(config => {
       this.url = config['dmx.websockets.url']
       // DEV && console.log('[DMX] CONFIG: WebSocket server is reachable at', this.url)
@@ -49,14 +46,14 @@ export default class DMXWebSocket {
   }
 
   _create () {
-    this.ws = new WebSocket(this.url, this.pluginUri)
+    this.ws = new WebSocket(this.url)
     this.ws.onopen = e => {
       DEV && console.log('[DMX] Opening WebSocket connection to', e.target.url)
     }
     this.ws.onmessage = e => {
       const message = JSON.parse(e.data)
       DEV && console.log('[DMX] Receiving message', message)
-      this.dispatch(message)
+      this.messageHandler(message)
     }
     this.ws.onclose = e => {
       DEV && console.log(`[DMX] Closing WebSocket connection (${e.reason})`)
